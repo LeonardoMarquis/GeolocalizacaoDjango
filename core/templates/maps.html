@@ -1,0 +1,31 @@
+<div class="col-sm-6">
+    <h3 class="text-primary">Localidades</h3>
+    <div id="mapDiv" class="gmap"></div>
+</div>
+</div> <!-- uma div la do index-->
+<script>
+    const businesses = JSON.parse('{{ items.businesses|safe|escapejs }}');
+
+    let lat = businesses[0].coordinates.latitude;
+    let lon = businesses[0].coordinates.longitude;
+
+    var map = L.map('mapDiv').setView([lat, lon], 13);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data © OpenStreetMap contributors',
+        maxZoom: 18
+    }).addTo(map);
+
+    // Agora o loop é JS puro → nenhum erro vermelho
+    businesses.forEach(biz => {
+        let marker = L.marker([
+            biz.coordinates.latitude,
+            biz.coordinates.longitude
+        ]).addTo(map);
+
+        marker.bindPopup(
+            `<b>${biz.name}</b><br>${biz.location.display_address[0]} ${biz.location.display_address[1]}<br>{{ city }}`
+        );
+    });
+
+</script>

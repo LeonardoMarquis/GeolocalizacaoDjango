@@ -1,0 +1,3 @@
+foi impossibilitada a integracao com servicos de geolocalizacao por causa da tal da yelp app, 
+pois o curso é de 2019 e estamos em 2026, houve muitas mudancas, e agora servicos cobram taxa e nao ha recursos para
+bancar. Resta apenas a tentativa de usar substitutos, mas é bem mais dificil
