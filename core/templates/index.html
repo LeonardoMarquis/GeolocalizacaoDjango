@@ -39,7 +39,12 @@
         {% if keyword %}
             <div class="mt-4">
                 {% if has_results %}
-                    <h4>{{ places|length }} estabelecimentos encontrados em {{ search_city }}</h4>
+                    <div class="alert alert-success">
+                        <strong>Busca por:</strong> "{{ keyword }}"
+                        <small class="text-muted">
+                            (encontramos {{ places|length }} resultados em {{ search_city }})
+                        </small>
+                    </div>
                     
                     {% for place in places %}
                         <div class="card mb-2">
@@ -47,6 +52,11 @@
                                 <h5 class="card-title">{{ place.name }}</h5>
                                 <p class="card-text">
                                     {{ place.address }}<br>
+                                    {% if place.categories %}
+                                        <small class="text-muted">
+                                            Categorias: {{ place.categories|join:", " }}
+                                        </small>
+                                    {% endif %}
                                     <small class="text-muted">
                                         Lat: {{ place.lat|floatformat:4 }}, 
                                         Lon: {{ place.lon|floatformat:4 }}
@@ -60,9 +70,12 @@
                     <div class="alert alert-warning">
                         <h5>Nenhum estabelecimento encontrado</h5>
                         <p>Não encontramos "{{ keyword }}" em {{ search_city }}</p>
-                        <p class="mb-0">
-                            <small>Tente: pizzaria, restaurante, bar, lanchonete</small>
-                        </p>
+                        <p>Tente variações como:</p>
+                        <ul>
+                            <li><strong>pizza</strong> ao invés de pizzaria</li>
+                            <li><strong>restaurante</strong> para busca geral</li>
+                            <li><strong>bar</strong> para bares</li>
+                        </ul>
                     </div>
                 {% endif %}
             </div>

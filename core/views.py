@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import View
 import json
+import logging
+from .text_normalizer import normalizar_categoria, normalizar_cidade
+
+logger = logging.getLogger(__name__)
 
 from .utils import search_places, get_client_data
 
