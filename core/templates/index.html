@@ -5,7 +5,7 @@
     <div class="col-sm-6">
         <form autocomplete="off" action="{% url 'index' %}" method="get">
             <div class="form-group">
-                <h1><a href="{% url 'index' %}">Buscador Django</a></h1>
+                <h1><a href="{% url 'index' %}">Comida Search Django</a></h1>
                 <h4>Sua localização: {{ user_city }}</h4>
             </div>
             
@@ -16,7 +16,7 @@
                        placeholder="Ex: pizzaria, restaurante, bar" 
                        value="{{ keyword }}" required>
                 <small class="form-text text-muted">
-                    Digite o tipo de estabelecimento
+                    Digite o tipo de estabelecimento(Tente Pizzaria, Restaurante, Bar)
                 </small>
             </div>
             
