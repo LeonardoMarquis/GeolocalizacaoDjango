@@ -1,96 +1,78 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row">
-    <div class="col-sm-6">
-        <form autocomplete="off" action="{% url 'index' %}" method="get">
-            <div class="form-group">
-                <h1><a href="{% url 'index' %}">Comida Search Django</a></h1>
-                <h4>Sua localização: {{ user_city }}</h4>
-            </div>
-            
-            <div class="form-group">
-                <label for="key">O que você procura?</label>
-                <input class="form-control" type="text" 
-                       name="key" id="key" 
-                       placeholder="Ex: pizzaria, restaurante, bar" 
-                       value="{{ keyword }}" required>
-                <small class="form-text text-muted">
-                    Digite o tipo de estabelecimento(Tente Pizzaria, Restaurante, Bar)
-                </small>
-            </div>
-            
-            <div class="form-group">
-                <label for="loc">Em qual cidade?</label>
-                <input class="form-control" type="text" 
-                       name="loc" id="loc" 
-                       placeholder="Ex: Salvador, São Paulo, Rio" 
-                       value="{{ search_city }}">
-                <small class="form-text text-muted">
-                    Deixe em branco para usar sua localização
-                </small>
-            </div>
-            
-            <button type="submit" class="btn btn-primary">
-                Buscar
-            </button>
-        </form>
-        
-        {% if keyword %}
-            <div class="mt-4">
-                {% if has_results %}
-                    <div class="alert alert-success">
-                        <strong>Busca por:</strong> "{{ keyword }}"
-                        <small class="text-muted">
-                            (encontramos {{ places|length }} resultados em {{ search_city }})
-                        </small>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">
+            <a href="{% url 'index' %}" class="text-decoration-none">Comida Search</a>
+        </h1>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 p-4 mb-4">
+                <form autocomplete="off" action="{% url 'index' %}" method="get">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="key" id="key" placeholder="Pizzaria" value="{{ keyword }}" required>
+                        <label for="key">O que você procura?</label>
                     </div>
-                    
-                    {% for place in places %}
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ place.name }}</h5>
-                                <p class="card-text">
-                                    {{ place.address }}<br>
-                                    {% if place.categories %}
-                                        <small class="text-muted">
-                                            Categorias: {{ place.categories|join:", " }}
-                                        </small>
-                                    {% endif %}
-                                    <small class="text-muted">
-                                        Lat: {{ place.lat|floatformat:4 }}, 
-                                        Lon: {{ place.lon|floatformat:4 }}
-                                    </small>
-                                </p>
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="loc" id="loc" placeholder="Cidade" value="{{ search_city }}">
+                        <label for="loc">Em qual cidade?</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
+                        <i class="bi bi-search"></i> Buscar Agora
+                    </button>
+                </form>
+            </div>
+
+            {% if keyword %}
+                <div class="results-container">
+                    {% if has_results %}
+                        <h5 class="mb-3 text-muted">{{ places|length }} locais encontrados</h5>
+                        {% for place in places %}
+                            <div class="card mb-3 border-0 shadow-sm hover-shadow transition">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">{{ place.name }}</h5>
+                                    <p class="card-text text-muted small mb-2">{{ place.address }}</p>
+                                    {% for cat in place.categories %}
+                                        <span class="badge rounded-pill bg-light text-dark border">{{ cat }}</span>
+                                    {% endfor %}
+                                </div>
                             </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-light border shadow-sm text-center">
+                            <p class="mb-0">Nenhum resultado para "{{ keyword }}".</p>
                         </div>
-                    {% endfor %}
-                    
-                {% else %}
-                    <div class="alert alert-warning">
-                        <h5>Nenhum estabelecimento encontrado</h5>
-                        <p>Não encontramos "{{ keyword }}" em {{ search_city }}</p>
-                        <p>Tente variações como:</p>
-                        <ul>
-                            <li><strong>pizza</strong> ao invés de pizzaria</li>
-                            <li><strong>restaurante</strong> para busca geral</li>
-                            <li><strong>bar</strong> para bares</li>
-                        </ul>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        {% if has_results %}
+        <div class="col-lg-7">
+            <div class="sticky-top" style="top: 20px;">
+                <div class="card shadow-sm overflow-hidden">
+                    <div id="mapDiv" style="height: 500px; width: 100%;"></div>
+                </div>
             </div>
+        </div>
         {% endif %}
     </div>
-    
-    {% if has_results %}
-        <div class="col-sm-6">
-            <h3 class="text-primary">
-                Mapa - {{ places|length }} locais encontrados
-            </h3>
-            <div id="mapDiv" class="gmap"></div>
-        </div>
-    {% endif %}
 </div>
+
+<style>
+    /* CSS para deixar o mapa com bordas bonitas e fixo na tela ao rolar */
+    .hover-shadow:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+    .transition { transition: 0.3s; }
+    .gmap { border-radius: 10px; }
+</style>
 
 {% if has_results %}
 <script>
@@ -136,5 +118,4 @@
     }
 </script>
 {% endif %}
-
 {% endblock %}
