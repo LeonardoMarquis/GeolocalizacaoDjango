@@ -2,7 +2,8 @@
     <h3 class="text-primary">Localidades</h3>
     <div id="mapDiv" class="gmap"></div>
 </div>
-</div> <!-- uma div la do index-->
+</div> 
+
 <script>
     const businesses = JSON.parse('{{ items.businesses|safe|escapejs }}');
 
@@ -16,7 +17,7 @@
         maxZoom: 18
     }).addTo(map);
 
-    // Agora o loop é JS puro → nenhum erro vermelho
+    
     businesses.forEach(biz => {
         let marker = L.marker([
             biz.coordinates.latitude,
@@ -28,6 +29,7 @@
         );
     });
 
+    
     setTimeout(function(){ 
         map.invalidateSize(); 
     }, 500);

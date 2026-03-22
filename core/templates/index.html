@@ -65,7 +65,7 @@
 </div>
 
 <style>
-    /* CSS para deixar o mapa com bordas bonitas e fixo na tela ao rolar */
+    /* CSS do mapa*/
     .hover-shadow:hover {
         transform: translateY(-3px);
         box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
@@ -76,14 +76,14 @@
 
 {% if has_results %}
 <script>
-    // Recebe os lugares do Django
+    // lugares vindos do Django
     const places = {{ places_json|safe }};
     
     console.log('Lugares encontrados:', places.length);
     console.log('Primeiro lugar:', places[0]);
     
     if (places && places.length > 0) {
-        // Centraliza o mapa no primeiro lugar
+        // Centralizar o mapa
         const firstPlace = places[0];
         const map = L.map('mapDiv').setView(
             [firstPlace.lat, firstPlace.lon], 
